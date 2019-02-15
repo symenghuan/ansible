@@ -1,0 +1,18 @@
+---
+########### Install docker########
+- name: Install docker repo
+  shell: wget -O /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
+  when: "ansible_distribution == 'CentOS'" 
+  ignore_errors: True
+
+- name: install docker
+  yum: name=docker-ce-{{ VERSION }} state=present
+
+- name: start docker
+  service: name=docker state=present enabled=yes
+
+- name: copy sh repair
+  copy: src=docker-runc.sh dest=/tmp mode=0755
+
+- name: repair docker bug
+  shell: sh -x /tmp/docker-runc.sh

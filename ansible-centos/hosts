@@ -1,0 +1,6 @@
+[tomcat-servers]
+webserver1
+
+
+[g1]
+10.82.12.93

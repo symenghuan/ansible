@@ -1,0 +1,81 @@
+---
+######### Selinux Firewalld Disable######
+- name: Selinux dsiable
+  lineinfile:
+    dest: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: 'SELINUX=disabled'
+
+- name: Selinux stop
+  selinux: state=disabled
+
+- name: Iptables disable
+  service: name=iptables state=stopped enabled=no
+  when: "ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'"
+
+- name: Firewalld disable
+  service: name=firewalld state=stopped enabled=no
+  when: "ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'"
+
+########### Install Base Soft########
+- name: Install wget
+  yum: name=wget
+
+- name: Install epel 6
+  shell: rpm -ivh http://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+  when: "ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'" 
+  ignore_errors: True
+
+- name: Install epel 7
+  shell: rpm -ivh http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+  when: "ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'"
+  ignore_errors: True
+
+- name: Backup yum
+  shell: mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+
+- name: Install yum 6
+  shell: wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS6-Base-163.repo
+  when: "ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'"
+  ignore_errors: True
+
+- name: Install yum 7
+  shell: wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.163.com/.help/CentOS7-Base-163.repo
+  when: "ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'"
+  ignore_errors: True
+
+
+### Old yum install type####
+#- name: Basic tools install
+#  yum: name={{ item }} state=present
+#  with_items:
+#  - vim
+#  - lrzsz
+#  - ntp
+#  - net-tools
+#  - libselinux-python
+#  - zip
+
+### ansible 2.11 yum install type ####
+- name: Baseic tools install
+  yum:
+    name: ['vim', 'lrzsz', 'ntp', 'net-tools', 'libselinux-python', 'zip']
+    state: present
+
+
+########Change Hostname########
+- name: Add hosts
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ ansible_ens160['ipv4']['address'] }}  {{ansible_hostname}}"
+  when: "ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'"
+  
+###### Sync Ntp##########
+- name: Sync ntp
+  service: name=ntpd state=stopped
+  notify: sync ntpd
+
+- name: cron ntp job
+  cron: name="cron jobs" job="ntpdate {{ ntpserver }};/sbin/hwclock -w" minute=0 hour=2 disabled=no
+
+

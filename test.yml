@@ -1,0 +1,23 @@
+---
+- hosts: g1
+  remote_user: root
+  vars:
+    ntpserver: 10.82.12.238
+  tasks:
+#  - name: ntpdate time
+#    shell: ntpdate {{ ntpserver }}
+#  - name: cron job
+#    cron: name="cron jobs" job="ntpdate {{ ntpserver }};/sbin/hwclock -w" minute=0 hour=5 disabled=no
+#  - name: when test
+#    command: echo "test"
+#    when: "ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'"
+#  - name: when test1
+#    command: echo "centos"
+#    when: "ansible_distribution == 'RedHat' and ansible_distribution_major_version == '7'"
+#  - hostname : name={{ hostname }}
+
+  - name: Add hosts
+    lineinfile:
+      dest: /etc/hosts
+      line: "{{ ansible_ens160['ipv4']['address'] }}  {{ansible_hostname}}"
+

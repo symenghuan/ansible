@@ -1,0 +1,4 @@
+# Here are variables for installation
+ntpserver: ntp1.aliyun.com 
+# docker-ce Version
+VERSION: docker-ce-17.06.2.ce

@@ -1,0 +1,3 @@
+#---
+#- name: sync ntpd
+#  shell: ntpdate {{ ntpserver }}
