@@ -1,0 +1,16 @@
+---
+###########Python mem check ########
+- name: Python base
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: 0755
+  with_items:
+#    - { src: python.sh,dest: /tmp }
+#    - { src: get_mem.py,dest: /opt/k8s }
+    - { src: k8s_alert.py,dest: /opt/k8s/k8s_check.py }
+
+- name: Cron task
+  cron: name="k8s check" job="python /opt/k8s/k8s_check.py >> /opt/k8s/k8s_check.log" minute=*/5 state=present
+
+

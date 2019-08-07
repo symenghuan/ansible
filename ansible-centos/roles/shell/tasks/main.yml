@@ -1,0 +1,17 @@
+---
+###########shell clear disk ########
+- name: mkdir shell
+  shell: mkdir -pv /usr/local/shell
+
+- name: clear disk
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: 0755
+  with_items:
+    - { src: clear_disk.sh,dest: /usr/local/shell/ }
+
+- name: Cron task
+  cron: name="clear disk" job="/usr/local/shell/clear_disk.sh" hour=*/1 state=present
+
+
