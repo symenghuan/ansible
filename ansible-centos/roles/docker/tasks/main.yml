@@ -9,7 +9,7 @@
   yum: name=docker-ce-{{ VERSION }} state=present
 
 - name: start docker
-  service: name=docker state=present enabled=yes
+  service: name=docker state=restarted enabled=yes
 
 - name: copy sh repair
   copy: src=docker-runc.sh dest=/tmp mode=0755

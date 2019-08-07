@@ -76,6 +76,6 @@
   notify: sync ntpd
 
 - name: cron ntp job
-  cron: name="cron jobs" job="ntpdate {{ ntpserver }};/sbin/hwclock -w" minute=0 hour=2 disabled=no
+  cron: name="cron jobs" job="/usr/sbin/ntpdate {{ ntpserver }};/sbin/hwclock -w" minute=0 hour=2 disabled=no
 
 

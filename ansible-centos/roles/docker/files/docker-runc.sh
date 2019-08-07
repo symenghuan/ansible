@@ -5,7 +5,8 @@ which docker-runc
 mv /usr/bin/docker-runc /usr/bin/docker-runc.orig.$(date -Iseconds)
 
 # 下载修复的runc
-curl -o /usr/bin/docker-runc -sSL https://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/runc/docker-runc-17.06-amd64
+#curl -o /usr/bin/docker-runc -sSL https://acs-public-mirror.oss-cn-hangzhou.aliyuncs.com/runc/docker-runc-17.06-amd64
+wget -O /usr/bin/docker-runc https://github.com/rancher/runc-cve/releases/download/CVE-2019-5736-build3/runc-v17.03.2-amd64
 
 # 设置它的可执行权限
 chmod +x /usr/bin/docker-runc
