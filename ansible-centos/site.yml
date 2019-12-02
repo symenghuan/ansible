@@ -1,12 +1,12 @@
 ---
 # This playbook Install Base Tools and Service.
 
-- hosts: g1
+- hosts: sky
   remote_user: root
 
   roles:
     - common
-    - docker
+#    - docker
 
 #- hosts: g2
 #  remote_user: root
